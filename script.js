@@ -21,25 +21,39 @@ async function run() {
     // this is because they don't pass through schema validation!
     // instead just use simple, find, update, delete, etc. methods
     try {
-        const myUser = await user.create(
-            {
-                // note: if you provide wrong datatype in schema,
-                // js will try to cast it to the valid datatype
-                // and it will throw error if it is unable to cast it
-                // to the valid datatype
-                name: "Rahul", 
-                age: 26,
-                hobbies: ["Weight Lifting", "Bowling"],
-                address: {
-                    street: "Main St",
-                    city: "Ropar"
-                },
-                email: "Test@test.com"
-            },
+        // to find a user by its object id
+        // const myUser = await user.findById("622481ba351fcd8c7aa8129b")
 
-        )
-        myUser.createdAt = 5;
-        await myUser.save()
+        // find method in mongoose runs identical to that in mongodb
+        // const myUser = await user.find({name: "Jatin"})
+
+        // findOne is also similar to that of mongodb
+        // exists will return id if at least one result exists with passed query
+        // const myUser = await user.exists({name: "Jatin"})
+        
+        // deleteOne (is recomended by kyle)
+        // const myUser =  await user.deleteOne({name: "Nitin"})
+
+        // Queries in mongoose:
+        // these are similar to flask queries
+        // const myUser = await user.where("name").equals("Jatin")
+        // we can also do chaining in mongoose queries
+        // we can limit our results
+        // we can also select certain fields from the documents returned
+        // const myUser = await user.where("age").gt(12).where("name").equals("Jatin").limit(2).select("age")
+
+
+        // const myUser = await user.where("age").gt(12).where("name").equals("Jatin").limit(2).select("age")
+        // myUser[0].bestFriend = "6224758c60e14d331bef6825"
+        // await myUser[0].save()
+
+        const myUser = await user.where("age")
+        .gt(12)
+        .where("name")
+        .equals("Jatin")
+        .populate("bestFriend")
+        .limit(1)
+
         console.log(myUser)
     } catch(e){
         console.log("error is ", e.message)

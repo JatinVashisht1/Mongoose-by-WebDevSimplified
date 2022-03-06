@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
         max: 100,
         // we can also apply custom validation
         validate: {
-            validator: (v) => v%2 === 0,
+            validator: (v) => v%2 !== 0,
             message: props => `${props.value} is not an even number`
         }
     },
@@ -46,7 +46,11 @@ const userSchema = new mongoose.Schema({
 
     },
     // this means that this bestfriend is the reference to the other object based on the id
-    bestFriend: mongoose.SchemaTypes.ObjectId,
+    bestFriend: {
+        type: mongoose.SchemaTypes.ObjectId,
+        // ref tell the mongoose which model does this object id refers
+        ref: "User"
+    },
     // if we leave the brackets blank then it can be array of "anything"
     hobbies: [String],
    address: addressSchema
