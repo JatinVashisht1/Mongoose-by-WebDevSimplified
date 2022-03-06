@@ -21,6 +21,7 @@ async function run(){
     // another way to save user:
     const myUser = await user.create({name: "Jatin", age: 19})
     myUser.name = "Nitin"
+    // to update user, we have to call save method explicitly
     await myUser.save()
     console.log("user saved")
     console.log(myUser)
