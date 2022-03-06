@@ -21,40 +21,22 @@ async function run() {
     // this is because they don't pass through schema validation!
     // instead just use simple, find, update, delete, etc. methods
     try {
-        // to find a user by its object id
-        // const myUser = await user.findById("622481ba351fcd8c7aa8129b")
 
-        // find method in mongoose runs identical to that in mongodb
-        // const myUser = await user.find({name: "Jatin"})
+        // const myUser = await user.findOne({name: "Jatin"})
+        // this is the method we defined over our model instance in user.js file
+        // myUser.sayHi()
 
-        // findOne is also similar to that of mongodb
-        // exists will return id if at least one result exists with passed query
-        // const myUser = await user.exists({name: "Jatin"})
+        // this is the static method we defined over our schema in user.js file
+        // const myUser = await user.findByName("Jatin")
         
-        // deleteOne (is recomended by kyle)
-        // const myUser =  await user.deleteOne({name: "Nitin"})
-
-        // Queries in mongoose:
-        // these are similar to flask queries
-        // const myUser = await user.where("name").equals("Jatin")
-        // we can also do chaining in mongoose queries
-        // we can limit our results
-        // we can also select certain fields from the documents returned
-        // const myUser = await user.where("age").gt(12).where("name").equals("Jatin").limit(2).select("age")
-
-
-        // const myUser = await user.where("age").gt(12).where("name").equals("Jatin").limit(2).select("age")
-        // myUser[0].bestFriend = "6224758c60e14d331bef6825"
-        // await myUser[0].save()
-
-        const myUser = await user.where("age")
-        .gt(12)
-        .where("name")
-        .equals("Jatin")
-        .populate("bestFriend")
-        .limit(1)
-
+        // we cannot apply byName directly to the user model
+        // this is because we can only use it with query
+        // as it is only defined over the query
+        // const myUser = await user.find().byName("Jatin")
+        const myUser = await user.findOne({name: "Jatin", email: "test@test.com"})
         console.log(myUser)
+        console.log(myUser.namedEmail)
+
     } catch(e){
         console.log("error is ", e.message)
     }

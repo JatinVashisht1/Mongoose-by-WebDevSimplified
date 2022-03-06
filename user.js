@@ -56,6 +56,46 @@ const userSchema = new mongoose.Schema({
    address: addressSchema
 })
 
+// we can't use arrow function in mongoose
+// we have to use actual function
+// because we have to reference each object with "this" keyword
+// these functions becomes very useful when you have to do bunch of d/f things related to the model
+// and don't want to have to define the code everywhere
+// these methods will be available to each instance of the model
+userSchema.methods.sayHi = function (){
+    console.log("Hi, my name is", this.name)
+}
+
+// we can also define static methods
+// these will be avaiable over the model itself and not over its instances
+
+userSchema.statics.findByName = function (name){
+    // TODO: learn about RegularExpressions in js
+    // we are returning a query here
+    // this can also be complex
+    // where can also take almost everything that find takes!
+    // using find because we just want to return a result and
+    // don't want to chain queries and do query related stuff
+    return this.find({name: new RegExp(name, 'i')})
+}
+
+// defining custom queries
+userSchema.query.byName = function (name){
+    // this can be used as a query and can also be used for chaining
+    // different queries
+    return this.where({name: new RegExp(name, 'i')})
+}
+
+// virtual is like a property
+// but this is not actual property it is sort of "virtual property",
+// this can be dependent on some other properties in schema
+// for example in below example we have created a "namedEmail" property
+// and this will be avaialable to all the instances of the model
+// also note that this will not be saved in our database but only be avaialable in our code
+userSchema.virtual("namedEmail").get(function(){
+    return `${this.name} <${this.email}>`
+})
+// Modeling our schema:
 // this takes two parameters,
 // first one is the name of the model and 
 // second one is the schema we defined
