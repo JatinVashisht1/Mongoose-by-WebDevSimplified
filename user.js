@@ -95,6 +95,31 @@ userSchema.query.byName = function (name){
 userSchema.virtual("namedEmail").get(function(){
     return `${this.name} <${this.email}>`
 })
+
+// Schema middleware
+// middleware in mongoose allows you to insert code in between the actions,
+// for example creating the user or creating the user
+// there can be a middleware for CRUD operations
+// mostly used middlewares are create, update and remove one
+
+// "pre" middleware will be called before we the data
+// we can call the next to move to the next middleware
+userSchema.pre("save", function(next){
+    this.updatedAt = Date.now()
+    // if don't call the next() then it would not move forward!
+    next()
+})
+
+// doc here is the user object
+// the thing that has been saved
+userSchema.post("save", function(doc, next){
+    doc.sayHi()
+    // if don't call the next() then it would not move forward!
+    // if you don't want to save the object then we can instead of
+    // calling next we can throw error and catch where we are saving it
+    next()
+})
+
 // Modeling our schema:
 // this takes two parameters,
 // first one is the name of the model and 

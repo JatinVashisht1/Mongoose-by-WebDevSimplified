@@ -33,9 +33,13 @@ async function run() {
         // this is because we can only use it with query
         // as it is only defined over the query
         // const myUser = await user.find().byName("Jatin")
-        const myUser = await user.findOne({name: "Jatin", email: "test@test.com"})
-        console.log(myUser)
+        // const myUser = await user.findOne({name: "Nitin", email: "test@test.com"})
+        // console.log(myUser)
+
+        const myUser = await user.findOne({name: "Nitin"})
         console.log(myUser.namedEmail)
+        await myUser.save()
+        console.log(myUser)
 
     } catch(e){
         console.log("error is ", e.message)
