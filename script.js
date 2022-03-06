@@ -17,7 +17,7 @@ mongoose.connect("mongodb://localhost/testdb", () => {
 
 async function run() {
     // try not to use functions such as:
-    // findOneAndReplace, findById, findOneAndReplace, etc.
+    // findOneAndReplace, findOneAndReplace, etc.
     // this is because they don't pass through schema validation!
     // instead just use simple, find, update, delete, etc. methods
     try {
