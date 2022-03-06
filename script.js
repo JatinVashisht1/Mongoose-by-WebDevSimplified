@@ -16,6 +16,10 @@ mongoose.connect("mongodb://localhost/testdb", () => {
 // how to create new user
 
 async function run() {
+    // try not to use functions such as:
+    // findOneAndReplace, findById, findOneAndReplace, etc.
+    // this is because they don't pass through schema validation!
+    // instead just use simple, find, update, delete, etc. methods
     try {
         const myUser = await user.create(
             {
@@ -23,14 +27,19 @@ async function run() {
                 // js will try to cast it to the valid datatype
                 // and it will throw error if it is unable to cast it
                 // to the valid datatype
-                name: "Rahul", age: 26,
+                name: "Rahul", 
+                age: 26,
                 hobbies: ["Weight Lifting", "Bowling"],
                 address: {
                     street: "Main St",
                     city: "Ropar"
-                }
-            }
+                },
+                email: "Test@test.com"
+            },
+
         )
+        myUser.createdAt = 5;
+        await myUser.save()
         console.log(myUser)
     } catch(e){
         console.log("error is ", e.message)

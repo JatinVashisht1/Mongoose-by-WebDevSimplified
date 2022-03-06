@@ -1,9 +1,6 @@
 const mongoose = require("mongoose")
 
-// this is the second way to define nested objects,
-// we make a whole different schema for them
-// making another schema is makes things easy when we have many
-// nested objects
+
 const addressSchema = new mongoose.Schema({
     street: String,
     city: String
@@ -13,27 +10,45 @@ const addressSchema = new mongoose.Schema({
 // schema is nothing but key value pairs
 const userSchema = new mongoose.Schema({
     name: String,
-    age: Number,
-    email: String,
-    createdAt: Date,
-    updatedAt: Date,
+    age: {
+        type: Number,
+        min: 1,
+        max: 100,
+        // we can also apply custom validation
+        validate: {
+            validator: (v) => v%2 === 0,
+            message: props => `${props.value} is not an even number`
+        }
+    },
+    // this is the way to do schema validation
+    // to make a field "required", we have to pass object instead of datatype only,
+    // first key is the type of variable,
+    // second is required which a boolean variable
+    // we can explore other options also, try them to explore by yourself
+    email: {
+        type: String,
+        required: true,
+        lowercase: true,
+        minlength: 5,
+        maxlength: 20,
+
+    },
+    createdAt: {
+        type: Date,
+        immutable: true,
+        // default: new Date() // this is not ideal way because it will run once and will give static value, same as writing 5 instead
+        default: () => Date.now(), // this is the correct way of doing it
+
+    },
+    updatedAt: {
+        type: Date,
+        default: () => Date.now(),
+
+    },
     // this means that this bestfriend is the reference to the other object based on the id
     bestFriend: mongoose.SchemaTypes.ObjectId,
     // if we leave the brackets blank then it can be array of "anything"
     hobbies: [String],
-    // there are two ways to add these nested objects inside of mongoose
-    // below is the one way
-    // in this you put objects just inside
-    // in another way you can define a whole different schema
-    /*
-    address: {
-        street: String,
-        city: String
-    }
-    */
-   // using second way
-   // by doing this way if we print our user,
-   // the the address property will also have its id
    address: addressSchema
 })
 
