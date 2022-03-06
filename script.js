@@ -1,9 +1,9 @@
 const mongoose = require("mongoose")
 const user = require("./user")
-mongoose.connect("mongodb://localhost/testdb", ()=>{
+mongoose.connect("mongodb://localhost/testdb", () => {
     console.log("connected")
 },
-e => console.log("error connecting to database, due to: ", e)
+    e => console.log("error connecting to database, due to: ", e)
 )
 
 // mongoose will queue up the database commands until it connects to mongodb 
@@ -15,16 +15,26 @@ e => console.log("error connecting to database, due to: ", e)
 
 // how to create new user
 
-async function run(){ 
-    // const myUser = new user({name: "Jatin", age: "19"})
-    // await myUser.save()
-    // another way to save user:
-    const myUser = await user.create({name: "Jatin", age: 19})
-    myUser.name = "Nitin"
-    // to update user, we have to call save method explicitly
-    await myUser.save()
-    console.log("user saved")
-    console.log(myUser)
+async function run() {
+    try {
+        const myUser = await user.create(
+            {
+                // note: if you provide wrong datatype in schema,
+                // js will try to cast it to the valid datatype
+                // and it will throw error if it is unable to cast it
+                // to the valid datatype
+                name: "Rahul", age: 26,
+                hobbies: ["Weight Lifting", "Bowling"],
+                address: {
+                    street: "Main St",
+                    city: "Ropar"
+                }
+            }
+        )
+        console.log(myUser)
+    } catch(e){
+        console.log("error is ", e.message)
+    }
 }
 
 // instead of giving this promise we can make an async function
